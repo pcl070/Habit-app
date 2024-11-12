@@ -1,12 +1,12 @@
 <template>
   <div class="habit-list">
-    <HabitItem
-      v-for="habit in habits"
-      :key="habit.id"
-      :habit="habit"
-      :isCompleted="isHabitCompleted(habit.id)"
-      @toggle-completion="toggleCompletion"
-    />
+    <div class="habit-item" v-for="habit in habits" :key="habit.id">
+      <HabitItem
+        :habit="habit"
+        :isCompleted="isHabitCompleted(habit.id)"
+        @toggle-completion="toggleCompletion"
+      />
+    </div>
   </div>
 </template>
 
@@ -28,8 +28,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.habit-list {
-  padding: 10px;
-}
-</style>
+<style scoped></style>

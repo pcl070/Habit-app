@@ -2,7 +2,12 @@
   <div class="calendar">
     <div class="calendar-header">
       <button @click="previousMonth">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="var(--button-text-color)"
+        >
           <path
             d="M15.293 3.293 6.586 12l8.707 8.707 1.414-1.414L9.414 12l7.293-7.293-1.414-1.414z"
           />
@@ -10,7 +15,12 @@
       </button>
       <h2>{{ monthYear }}</h2>
       <button @click="nextMonth">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="var(--button-text-color)"
+        >
           <path
             d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"
           />
@@ -37,20 +47,23 @@
 </template>
 
 <script>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import dayjs from 'dayjs'
 import { useHabitStore } from '../stores'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
   setup() {
     const habitStore = useHabitStore()
-    const currentMonth = ref(dayjs().startOf('month'))
     const router = useRouter()
+    const route = useRoute()
     const today = dayjs().startOf('day')
 
     // Track the currently selected date
     const selectedDate = ref(today.format('YYYY-MM-DD'))
+
+    // Initialize `currentMonth` to match the selected date if available, or fallback to today's month
+    const currentMonth = ref(dayjs(route.params.date || today).startOf('month'))
 
     const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
@@ -69,7 +82,7 @@ export default {
 
     const goToDay = (day) => {
       const formattedDate = day.format('YYYY-MM-DD')
-      selectedDate.value = formattedDate // Update selected date
+      selectedDate.value = formattedDate
       router.push({ name: 'day', params: { date: formattedDate } })
     }
 
@@ -108,13 +121,16 @@ export default {
       }
     }
 
-    // Watch for changes to completedHabits or habits to re-render progress
+    // Watch for changes in the route parameter `date` to update `selectedDate` and `currentMonth`
     watch(
-      [() => habitStore.completedHabits, () => habitStore.habits],
-      () => {
-        // Trigger reactivity to update the progress indicators when habits are checked/unchecked
+      () => route.params.date,
+      (newDate) => {
+        if (newDate) {
+          selectedDate.value = newDate
+          currentMonth.value = dayjs(newDate).startOf('month')
+        }
       },
-      { deep: true },
+      { immediate: true },
     )
 
     return {
@@ -142,7 +158,7 @@ export default {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: rgb(65, 59, 97);
-  background: linear-gradient(90deg, rgb(181, 174, 218) 4%, rgb(235, 188, 233) 94%);
+  background: var(--light-elements-color);
   padding: 20px;
   border-radius: 15px;
   border: 2px solid #212121;
@@ -200,7 +216,8 @@ export default {
   border-radius: 50%;
   font-size: 14px;
 
-  transition: ease 0.3s;
+  /* Add transition for background change */
+  transition: background 0.3s ease; /* This line animates the progress */
 }
 .progress-circle span {
   position: relative;
@@ -209,6 +226,7 @@ export default {
 
 /* Add style for the selected day with an inner border effect */
 .selected-day .progress-circle {
+  transition: 0.3s;
   box-shadow: inset 0 0 0 2px rgb(125, 125, 228); /* Creates an inner blue border */
 }
 

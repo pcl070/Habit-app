@@ -1,12 +1,38 @@
 <template>
   <div class="habit-item">
-    <input
-      type="checkbox"
-      :checked="isCompleted"
-      @change="toggleCompletion"
-      :id="`habit-${habit.id}`"
-    />
-    <label :for="`habit-${habit.id}`">{{ habit.name }}</label>
+    <!-- Left-aligned content wrapper -->
+    <div class="habit-content">
+      <!-- Custom Checkbox Wrapper -->
+      <div class="checkbox-wrapper">
+        <input
+          type="checkbox"
+          class="check"
+          :checked="isCompleted"
+          @change="toggleCompletion"
+          :id="`habit-${habit.id}`"
+        />
+        <label :for="`habit-${habit.id}`" class="label">
+          <svg width="45" height="45" viewBox="0 0 95 95">
+            <rect x="30" y="20" width="50" height="50" fill="none"></rect>
+            <g transform="translate(0,-952.36222)">
+              <path
+                d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
+                stroke="var(--delete-button-color)"
+                stroke-width="3"
+                fill="none"
+                class="path1"
+              ></path>
+            </g>
+          </svg>
+          <span>{{ habit.name }}</span>
+        </label>
+      </div>
+
+      <!-- Streak Display -->
+      <span v-if="streak > 2" class="streak">🔥 {{ streak }} days</span>
+    </div>
+
+    <!-- Delete Button aligned to the right -->
     <button class="btn" @click="deleteHabit">
       <svg
         viewBox="0 0 15 17.5"
@@ -22,7 +48,6 @@
         ></path>
       </svg>
     </button>
-    <span v-if="streak > 2" class="streak">🔥Current streak: {{ streak }} days</span>
   </div>
 </template>
 
@@ -38,7 +63,7 @@ export default {
       this.$emit('toggle-completion', this.habit.id)
     },
     deleteHabit() {
-      this.$emit('delete-habit', this.habit.id) // Emit delete event with habit ID
+      this.$emit('delete-habit', this.habit.id)
     },
   },
 }
@@ -47,198 +72,67 @@ export default {
 <style scoped>
 .habit-item {
   display: flex;
+  justify-content: space-between; /* Push delete button to right */
   align-items: center;
   padding: 10px;
 }
 
-/* Custom checkbox styles */
-input[type='checkbox'] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  position: relative;
-  height: 15px;
-  width: 15px;
-  outline: none;
-  border: 0;
-  margin: 0 10px 0 0; /* Adjust margin for spacing */
-  cursor: pointer;
-  background: var(--background, #fff);
+.habit-content {
   display: flex;
   align-items: center;
-  justify-content: center;
-  vertical-align: middle; /* Align with text */
+  gap: 10px; /* Space between elements on the left side */
 }
 
-.habit-item label {
-  color: var(--text, #414856);
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  margin-left: 5px; /* Optional: Adjust for more space */
+.checkbox-wrapper input[type='checkbox'] {
+  visibility: hidden;
+  display: none;
 }
 
-/* Optional: Add these to handle specific cases where centering is still off */
-.habit-item input[type='checkbox'],
-.habit-item label {
-  line-height: 1; /* Adjust to normalize alignment */
+.checkbox-wrapper * {
+  box-sizing: border-box;
+  user-select: none;
 }
 
-input[type='checkbox']::before,
-input[type='checkbox']::after {
-  content: '';
-  position: absolute;
-  height: 2px;
-  top: auto;
-  background: var(--check, #4f29f0);
-  border-radius: 2px;
-}
-
-input[type='checkbox']::before {
-  width: 0px;
-  right: 60%;
-  transform-origin: right bottom;
-}
-
-input[type='checkbox']::after {
-  width: 0px;
-  left: 40%;
-  transform-origin: left bottom;
-}
-
-/* Apply animations for checked state */
-input[type='checkbox']:checked::before {
-  animation: check-01 0.4s ease forwards;
-}
-
-input[type='checkbox']:checked::after {
-  animation: check-02 0.4s ease forwards;
-}
-
-input[type='checkbox']:checked + label {
-  color: var(--disabled, #c3c8de);
-  animation: move 0.3s ease 0.1s forwards;
-}
-
-input[type='checkbox']:checked + label::before {
-  background: var(--disabled, #c3c8de);
-  animation: slice 0.4s ease forwards;
-}
-
-input[type='checkbox']:checked + label::after {
-  animation: firework 0.5s ease forwards 0.1s;
-}
-
-.habit-item label {
-  color: var(--text, #414856);
+.checkbox-wrapper {
   position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.checkbox-wrapper .label {
   cursor: pointer;
-  display: grid;
+  display: flex;
   align-items: center;
-  transition: color 0.3s ease;
+  gap: 8px; /* Space between checkbox and label text */
+}
+
+.checkbox-wrapper .check {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  opacity: 0;
+}
+
+.checkbox-wrapper .label svg {
+  vertical-align: middle;
+  stroke: var(--delete-button-color);
+}
+
+.checkbox-wrapper .path1 {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  transition: 0.5s stroke-dashoffset;
+  opacity: 0;
+}
+
+.checkbox-wrapper .check:checked + label svg g path {
+  stroke-dashoffset: 0;
+  opacity: 1;
 }
 
 .streak {
-  margin-left: 10px;
-  color: #4caf50;
+  color: #5aa55e;
   font-weight: bold;
-}
-
-/* Animations */
-@keyframes move {
-  50% {
-    padding-left: 8px;
-    padding-right: 0px;
-  }
-  100% {
-    padding-right: 4px;
-  }
-}
-
-@keyframes slice {
-  0% {
-    width: 8px;
-  }
-  60% {
-    width: 100%;
-    left: 4px;
-  }
-  100% {
-    width: 100%;
-    left: -2px;
-  }
-}
-
-@keyframes check-01 {
-  0% {
-    width: 4px;
-    top: auto;
-    transform: rotate(0);
-  }
-  50% {
-    width: 0px;
-    top: auto;
-    transform: rotate(0);
-  }
-  51% {
-    width: 0px;
-    top: 8px;
-    transform: rotate(45deg);
-  }
-  100% {
-    width: 5px;
-    top: 8px;
-    transform: rotate(45deg);
-  }
-}
-
-@keyframes check-02 {
-  0% {
-    width: 4px;
-    top: auto;
-    transform: rotate(0);
-  }
-  50% {
-    width: 0px;
-    top: auto;
-    transform: rotate(0);
-  }
-  51% {
-    width: 0px;
-    top: 8px;
-    transform: rotate(-45deg);
-  }
-  100% {
-    width: 10px;
-    top: 8px;
-    transform: rotate(-45deg);
-  }
-}
-
-@keyframes firework {
-  0% {
-    opacity: 1;
-    box-shadow:
-      0 0 0 -2px #4f29f0,
-      0 0 0 -2px #4f29f0,
-      0 0 0 -2px #4f29f0,
-      0 0 0 -2px #4f29f0,
-      0 0 0 -2px #4f29f0,
-      0 0 0 -2px #4f29f0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    box-shadow:
-      0 -15px 0 0px #4f29f0,
-      14px -8px 0 0px #4f29f0,
-      14px 8px 0 0px #4f29f0,
-      0 15px 0 0px #4f29f0,
-      -14px 8px 0 0px #4f29f0,
-      -14px -8px 0 0px #4f29f0;
-  }
 }
 
 /* Delete button styles */
@@ -247,6 +141,10 @@ input[type='checkbox']:checked + label::after {
   position: relative;
   border: none;
   cursor: pointer;
+  box-shadow: none;
+  padding: 0;
+  margin-right: 8px;
+  fill: var(--delete-button-color);
 }
 
 .btn::after {
