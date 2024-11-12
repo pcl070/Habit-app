@@ -1,6 +1,6 @@
 <template>
   <header>
-    <!-- Dark Mode Toggle Switch with v-model for reactivity -->
+    <!-- Dark Mode Toggle Switch -->
     <label class="switch">
       <input type="checkbox" v-model="darkMode" @change="toggleDarkMode" />
       <span class="slider"></span>
@@ -75,7 +75,6 @@
       </svg>
     </button>
   </header>
-  <!-- Router View to Display Pages -->
   <router-view />
 </template>
 
@@ -90,12 +89,11 @@ export default {
 
     // Initialize dark mode based on localStorage value
     onMounted(() => {
-      habitStore.initLocalStorage() // Initialize localStorage watchers for habitStore
-
+      habitStore.initLocalStorage()
       const storedMode = localStorage.getItem('darkMode')
       if (storedMode === 'enabled') {
         darkMode.value = true
-        document.documentElement.classList.add('dark') // Apply .dark class to html
+        document.documentElement.classList.add('dark')
       }
     })
 
@@ -135,7 +133,7 @@ export default {
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
-/* Define CSS variables globally for light and dark mode */
+
 :root {
   --light-background-color: linear-gradient(
     18deg,
@@ -168,7 +166,7 @@ html.dark {
   --text-color: #fff;
   --button-bg-color: #444444;
   --button-text-color: #fff;
-  --logo-color: #fff; /* Define logo color for dark mode */
+  --logo-color: #fff;
   --delete-button-color: #fff;
   --buton-bord-color: #fff;
 }
@@ -191,7 +189,7 @@ html.dark body {
 header {
   display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Align items on both ends */
+  justify-content: space-between;
   align-items: center;
   min-height: 65px;
   max-height: 65px;
@@ -201,7 +199,7 @@ header {
 }
 
 .logo {
-  margin: 0 auto; /* Center the logo */
+  margin: 0 auto;
   transition: fill 0.3s ease;
 }
 
@@ -221,7 +219,6 @@ select {
 }
 
 .switch {
-  /* Flex align items on the left */
   margin-right: auto;
   --width-of-switch: 3.5em;
   --height-of-switch: 2em;
@@ -274,7 +271,6 @@ input:checked + .slider:before {
 }
 
 .reset-button {
-  /* Flex align items on the right */
   margin-left: auto;
   display: flex;
   align-items: center;
@@ -294,28 +290,26 @@ input:checked + .slider:before {
   background-color: #e60000;
 }
 
-/* Hide the SVG icon by default */
 .reset-icon {
   display: none;
-  fill: currentColor; /* Inherit color from the button */
+  fill: currentColor;
 }
 
-/* Show the SVG icon and hide the text on small screens (<=800px) */
 @media (max-width: 800px) {
   .reset-text {
-    display: none; /* Hide the text on small screens */
+    display: none;
   }
   .reset-icon {
-    display: inline; /* Show the icon on small screens */
+    display: inline;
   }
 }
 
 .habit-item {
   background: var(--light-elements-color);
   border: #212121 solid 1px;
-  padding: 10px; /* Optional: add padding to make each item distinct */
-  margin-bottom: 10px; /* Optional: space between items */
-  border-radius: 15px; /* Optional: rounded corners */
-  box-shadow: #212121 3px 3px 5px; /* Optional: add shadow to each item */
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  box-shadow: #212121 3px 3px 5px;
 }
 </style>

@@ -66,6 +66,10 @@ export default {
     const editedCategoryName = ref('') // Temporary storage for the edited category name
 
     const addCategory = () => {
+      if (newCategoryName.value.length > 25) {
+        alert('Category name should be 25 characters or less!')
+        return
+      }
       if (newCategoryName.value.trim()) {
         habitStore.addCategory(newCategoryName.value.trim())
         newCategoryName.value = ''
@@ -78,6 +82,10 @@ export default {
     }
 
     const saveCategory = (oldCategory) => {
+      if (editedCategoryName.value.length > 25) {
+        alert('Category name should be 25 characters or less!')
+        return
+      }
       if (editedCategoryName.value.trim() && editedCategoryName.value !== oldCategory) {
         habitStore.editCategory(oldCategory, editedCategoryName.value.trim())
       }
@@ -119,6 +127,20 @@ export default {
   },
 }
 </script>
+
+<style>
+.warning-text {
+  color: red;
+  font-size: 0.9em;
+}
+</style>
+
+<style>
+.warning-text {
+  color: red;
+  font-size: 0.9em;
+}
+</style>
 
 <style scoped>
 body {

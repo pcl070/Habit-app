@@ -42,7 +42,7 @@
         <span :class="{ 'warning-text': true, visible: newHabitName.length > 25 }"
           >Habit name should be 25 characters or less!</span
         >
-
+        <!-- Category selection-->
         <select v-model="selectedCategory" class="habit-category">
           <option disabled value="">Select Category</option>
           <option v-for="category in categories" :key="category" :value="category">
@@ -104,7 +104,7 @@ export default {
         newHabitName.value = value.charAt(0).toUpperCase() + value.slice(1)
       }
     })
-
+    // Adding a habit
     const addHabit = () => {
       if (newHabitName.value.trim() && selectedCategory.value) {
         habitStore.addHabit({
@@ -245,11 +245,10 @@ export default {
   padding: 0 4px;
   border-radius: 15px;
   background-color: rgba(255, 0, 0, 0.521);
-  opacity: 0; /* Start hidden */
-  transition: opacity 0.3s ease; /* Smooth transition */
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-/* When the warning is visible */
 .warning-text.visible {
   opacity: 1;
 }
