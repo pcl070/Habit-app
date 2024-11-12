@@ -121,6 +121,9 @@ export default {
 </script>
 
 <style scoped>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
 h2 {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -181,10 +184,19 @@ ul {
   border-color: var(--buton-bord-color);
   padding-bottom: 8px;
 }
+.category-content input {
+  border: none;
+  background-color: transparent;
+  font-size: 17px;
+  padding: 0;
+}
+.category-content input:focus-visible {
+  border: none;
+  outline: none;
+}
 
 .category-buttons {
   display: flex;
-  gap: 5px;
 }
 
 button {

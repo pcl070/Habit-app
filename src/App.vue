@@ -190,23 +190,24 @@ html.dark body {
 
 header {
   display: flex;
-  direction: row;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: space-between; /* Align items on both ends */
   align-items: center;
   min-height: 65px;
   max-height: 65px;
-  background-color: #0000002c;
   padding: 0 15px;
+  background-color: #0000002c;
   transition: background-color 0.3s ease;
 }
 
 .logo {
+  margin: 0 auto; /* Center the logo */
   transition: fill 0.3s ease;
 }
 
 .logo #Meditation path {
-  fill: var(--logo-color); /* Apply dynamic color based on mode */
-  transition: fill 0.3s ease; /* Smooth transition for logo color */
+  fill: var(--logo-color);
+  transition: fill 0.3s ease;
 }
 
 button,
@@ -220,7 +221,8 @@ select {
 }
 
 .switch {
-  display: block;
+  /* Flex align items on the left */
+  margin-right: auto;
   --width-of-switch: 3.5em;
   --height-of-switch: 2em;
   position: relative;
@@ -272,6 +274,8 @@ input:checked + .slider:before {
 }
 
 .reset-button {
+  /* Flex align items on the right */
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 5px;
